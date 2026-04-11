@@ -5,12 +5,12 @@
 #include <windows.h> // mau sac
 using namespace std;
 
-//=================menu================
-//set mau
+ //=================menu================
+///set mau
 void setColor(int color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
-//menu
+
 // ===== menu =====
 int menu() {
     string items[] = {
@@ -35,7 +35,7 @@ int menu() {
 
         for (int i = 0; i < n; i++) {
             if (i == pos) {
-                setColor(10); // mau xanh
+                setColor(10); // mÃ u xanh
                 cout << " >> " << items[i] << endl;
                 setColor(7);  // reset
             } else {
@@ -45,10 +45,10 @@ int menu() {
 
         int ch = _getch();
 
-        if (ch == 224) { 
+        if (ch == 224) { // phÃ­m Ä‘áº·c biá»‡t
             ch = _getch();
-            if (ch == 72) pos--; 
-            else if (ch == 80) pos++; 
+            if (ch == 72) pos--; // â†‘
+            else if (ch == 80) pos++; // â†“
 
             if (pos < 0) pos = n - 1;
             if (pos >= n) pos = 0;
@@ -66,7 +66,7 @@ int menuMayBay() {
         "3. Sua thong tin may bay",
         "4. Liet ke danh sach may bay",
         "5. Quay lai",
-	    "6. luu file",
+        "6. luu file",
         "7. Doc file"
     };
 
@@ -101,6 +101,35 @@ int menuMayBay() {
             return pos;
         }
     }
+}
+int main ()
+{
+	DSMAYBAY ds ;
+	ds.n = 0 ;
+	int a[100], n = 0;
+	
+	while (true) {
+	    int choice = menu();
+	    system("cls");
+	
+	    if (choice == 0) {   // Cáº­p nháº­t mÃ¡y bay
+	
+	        while (true) {
+	            int c = menuMayBay();
+	
+        if (c == 0) themmaybay(ds);
+        else if (c == 1) xoamaybay(ds);
+        else if (c == 2) suamaybay(ds);
+        else if (c == 3) xuatDSMB(ds);
+        else if (c == 5) SaveFile(ds, (char*)"maybay.dat");
+        else if (c == 6) OpenFile(ds, (char*)"maybay.dat");
+        else break;
+	            cout << endl << "Nhan phim bat ky..." << endl;
+	            _getch();
+	        }
+	
+}
+}
 }
 //menu con quan li chuyen bay
 int menuChuyenBay() {
