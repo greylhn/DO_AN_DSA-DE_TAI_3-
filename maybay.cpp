@@ -6,7 +6,7 @@ int timmaybay (DSMAYBAY &ds , char soHieu[])
 {
 	for (int i = 0 ; i <ds.n ; i++)
 	{
-		if (strcmp(ds.mb[i]->SoHieuMB , soHieu)== 0) return i ;
+		if (strcmp(ds.mb[i]->SoHieuMB , SoHieu)== 0) return i ;
 	}
 	return -1 ;
 }
