@@ -17,3 +17,6 @@ void themmaybay (DSMAYBAY &ds);
 void xoamaybay (DSMAYBAY &ds) ;
 void suamaybay (DSMAYBAY &ds) ;
 void xuatDSMB (DSMAYBAY &ds) ;
+void SaveFile(MAYBAY &ds,char *filename);
+void OpenFile(MAYBAY &ds, char *filename);
+void BaoLoi(const char* msg);
