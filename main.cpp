@@ -65,10 +65,12 @@ int menuMayBay() {
         "2. Xoa may bay",
         "3. Sua thong tin may bay",
         "4. Liet ke danh sach may bay",
-        "5. Quay lai"
+        "5. Quay lai",
+	    "6. luu file",
+        "7. Doc file"
     };
 
-    int n = 5;
+    int n = 7;
     int pos = 0;
 
     while (true) {
@@ -161,6 +163,8 @@ int main ()
 	            else if (c == 1) xoamaybay(ds);
 	            else if (c == 2) suamaybay(ds);
 	            else if (c == 3) xuatDSMB(ds);
+				else if (c == 5) SaveFile(ds, (char*)"maybay.dat");
+                else if (c == 6) OpenFile(ds, (char*)"maybay.dat");
 	            else break;
 	
 	            cout << endl << "Nhan phim bat ky..." << endl;
