@@ -100,3 +100,49 @@ void xuatDSMB(DSMAYBAY &ds){
             <<ds.mb[i]->SoCho<<endl;
     }
 }
+void BaoLoi(const char* msg){
+    cout << msg << endl;
+}
+void SaveFile(DSMAYBAY &ds, char *filename)
+{
+    FILE *f;
+    if ((f = fopen(filename, "wb")) == NULL)
+    {
+        BaoLoi("Loi mo file de ghi");
+        return;
+    }
+
+    for (int i = 0; i < ds.n; i++)
+        fwrite(ds.mb[i], sizeof(MAYBAY), 1, f);
+
+    fclose(f);
+    BaoLoi("Da ghi xong danh sach vao file");
+}
+void OpenFile(DSMAYBAY &ds, char *filename)
+{
+    FILE *f;
+    MAYBAY mb;
+    ds.n = 0;
+
+    if ((f = fopen(filename, "rb")) == NULL)
+    {
+        BaoLoi("Loi mo file de doc");
+        return;
+    }
+
+    while (fread(&mb, sizeof(MAYBAY), 1, f) != 0)
+    {
+        ds.mb[ds.n] = new MAYBAY;
+        *ds.mb[ds.n] = mb;
+        ds.n++;
+    }
+
+    fclose(f);
+    BaoLoi("Da load xong danh sach vao bo nho");
+}
+void DeleteItem (DSMAYBAY &ds, int i){
+	delete  ds.mb[i]; // chi dung trong mang con tro
+    for (int j=i+1; j <ds.n; j++)
+       ds.mb[j-1]=ds.mb[j];
+    ds.n--;
+	 }
