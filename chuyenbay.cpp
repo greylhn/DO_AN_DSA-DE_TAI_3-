@@ -1,137 +1,188 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<fstream>
+#include<string>
+#include<cstring>
+#include<iomanip>
 #include"chuyenbay.h"
-using namespace std ;
-//nhap thong tin 1 chuyen bay 
-void nhapthongtincb (CHUYENBAY &cb)
-{
-cout << "--- NHAP THONG TIN CHUYEN BAY ---" << endl;
-    
-    cout << "Nhap ma chuyen bay: ";
-    cin.getline(cb.MaCB, MAXMCB); 
+using namespace std;
 
-	nhapNgay(cb.NgayGioKH.day , cb.NgayGioKH.month , cb.NgayGioKH.year) ;
-	cout << endl ;
-	cout << "Nhap gio khoi hanh (hh mm): ";
-	cin >> cb.NgayGioKH.hour;
-	cin.ignore();
-	
-	cin >> cb.NgayGioKH.minute;
-	cin.ignore(); 
+NodeCB makeNodeCB(CHUYENBAY a) {
+    NodeCB tmp = new NoCB;
+    if (tmp == nullptr) return nullptr;
+    tmp->data = a;
+    tmp->next = nullptr;
+    return tmp;
+}
 
+void insert_order(listCB &ls, CHUYENBAY a) {
+    NodeCB newNode = makeNodeCB(a);
+    if (ls.head == nullptr || strcmp(a.MaCB, ls.head->data.MaCB) < 0) {
+        newNode->next = ls.head;
+        ls.head = newNode;
+        if (ls.tail == nullptr) ls.tail = newNode; // s?a = thành ==
+    } else {
+        NodeCB p = ls.head;
+        NodeCB pre = nullptr;
+        while (p != nullptr && strcmp(p->data.MaCB, a.MaCB) < 0) {
+            pre = p;
+            p = p->next;
+        }
+        newNode->next = p;
+        pre->next = newNode;
+        if (p == nullptr) ls.tail = newNode;
+    }
+    ls.soLuongCB++;
+}
 
-    cout << "Nhap ten san bay den: ";
-    cin.getline(cb.SanBayDen, MAXSBD);
+void save_file_dscb(listCB &ls) {
+    ofstream ofs("chuyenbay.txt", ios::out);
+    if (!ofs.is_open()) { cout << "Khong the mo file!\n"; return; }
+    NodeCB p = ls.head;
+    while (p != nullptr) {
+        ofs << p->data.MaCB << "\n"
+            << p->data.NgayGioKH.hour << " "
+            << p->data.NgayGioKH.minute << " "
+            << p->data.NgayGioKH.day << " "
+            << p->data.NgayGioKH.month << " "
+            << p->data.NgayGioKH.year << "\n"
+            << p->data.SanBayDen << "\n"
+            << p->data.TrangThai << "\n"
+            << p->data.SoHieuMB << "\n";
+        p = p->next;
+    }
+    ofs.close();
+    cout << "Da luu file thanh cong!\n";
+}
 
-    cout << "Nhap so hieu may bay: ";
-    cin.getline(cb.SoHieuMB, MAXSHMB);
+void load_file_dscb(listCB &ls) {
+    ifstream ifs("chuyenbay.txt", ios::in);
+    if (!ifs.is_open()) { cout << "Khong tim thay file!\n"; return; }
+    while (ifs.peek() != EOF) {
+        CHUYENBAY tmp;
+        ifs.getline(tmp.MaCB, MAXMCB);
+        ifs >> tmp.NgayGioKH.hour >> tmp.NgayGioKH.minute
+            >> tmp.NgayGioKH.day >> tmp.NgayGioKH.month >> tmp.NgayGioKH.year;
+        ifs.ignore();
+        ifs.getline(tmp.SanBayDen, MAXSBD);
+        ifs >> tmp.TrangThai;
+        ifs.ignore();
+        ifs.getline(tmp.SoHieuMB, MAXSHMB);
+        if (strlen(tmp.MaCB) > 0)
+            insert_order(ls, tmp);
+    }
+    ifs.close();
+}
 
-    cout << "Nhap trang thai (0: Huy, 1: Con ve, 2: Het ve, 3: Hoan): ";
-    cin >> cb.TrangThai;
-    
+NodeCB check_maCB(listCB ls, string ma) {
+    NodeCB p = ls.head;
+    while (p != nullptr) {
+        if (strcmp(p->data.MaCB, ma.c_str()) == 0) return p; // s?a == thành strcmp
+        p = p->next;
+    }
+    return nullptr;
+}
+
+void themCB(listCB &ls) {
+    CHUYENBAY tmp;
+    cout << "-----Nhap thong tin chuyen bay moi-----\n";
+    do {
+        cout << "Nhap MaCB: ";
+        cin.getline(tmp.MaCB, MAXMCB);
+        if (check_maCB(ls, tmp.MaCB) != nullptr)
+            cout << "Ma CB da trung, nhap lai!\n";
+    } while (check_maCB(ls, tmp.MaCB) != nullptr);
+
+    cout << "Nhap Ngay (d m y): ";
+    cin >> tmp.NgayGioKH.day >> tmp.NgayGioKH.month >> tmp.NgayGioKH.year;
+    cout << "Nhap Gio (h m): ";
+    cin >> tmp.NgayGioKH.hour >> tmp.NgayGioKH.minute;
+    cin.ignore(); // quan tr?ng!
+    cout << "Nhap San Bay Den: ";
+    cin.getline(tmp.SanBayDen, MAXSBD);
+    cout << "Nhap So Hieu May Bay: ";
+    cin.getline(tmp.SoHieuMB, MAXSHMB);
+    tmp.TrangThai = 1;
+
+    insert_order(ls, tmp); // insert_order dã tang soLuongCB r?i
+    cout << "Them thanh cong!\n";
+    save_file_dscb(ls);
+}
+
+void chinh_Datetime(listCB &ls) {
+    string ma_tim;
+    cout << "Nhap maCB muon chinh ngay gio: ";
+    getline(cin, ma_tim);
+    NodeCB p = ls.head;
+    while (p != nullptr) {
+        if (strcmp(p->data.MaCB, ma_tim.c_str()) == 0) break;
+        p = p->next;
+    }
+    if (p == nullptr) { cout << "Khong tim thay!\n"; return; }
+    cout << "Ngay gio hien tai: " << p->data.NgayGioKH.day << "/"
+         << p->data.NgayGioKH.month << "/" << p->data.NgayGioKH.year
+         << " " << p->data.NgayGioKH.hour << ":" << p->data.NgayGioKH.minute << "\n";
+    cout << "Nhap ngay moi (d m y): ";
+    cin >> p->data.NgayGioKH.day >> p->data.NgayGioKH.month >> p->data.NgayGioKH.year;
+    cout << "Nhap gio moi (h m): ";
+    cin >> p->data.NgayGioKH.hour >> p->data.NgayGioKH.minute;
     cin.ignore();
-    
-    cout << "=> Nhap thong tin thanh cong!" << endl;
-    cout << "---------------------------------" << endl;
-}
-//tao node moi cho cb
-DSCB makenodeCB ()
-{
-	DSCB tmp = new NodeCB ;
-	nhapthongtincb(tmp->data) ;
-	tmp->next = nullptr ;
-	return tmp ;
-}
-// them chuyen bay 
-void themCB (DSCB &a)
-{
-	DSCB tmp = makenodeCB();  
-
-	if (a == nullptr)
-	{
-		a = tmp;
-		return;
-	}
-
-	DSCB p = a;
-	while (p->next != nullptr)
-	{
-		p = p->next;
-	}
-	p->next = tmp;
-}
-//in 1 chuyen bay 
-void inCB (CHUYENBAY cb)
-{
-cout << "||" << cb.MaCB 
-     << "||" << cb.NgayGioKH.hour << ":" << cb.NgayGioKH.minute
-     << "||" << cb.NgayGioKH.day 
-     << "||" << cb.NgayGioKH.month 
-     << "||" << cb.NgayGioKH.year 
-     << "||" << cb.TrangThai 
-     << "||" << cb.SoHieuMB << "||";
-
-xuatDSVe(cb.dsve); 
-
-cout << endl;}
-//danh sach chuyen bay 
-void indsCB (DSCB ds)
-{
-	if (ds == nullptr)
-	{
-		cout << "Danh sach rong!" << endl;
-		return;
-	}
-
-	cout << "=====================================================================================\n";
-	cout << left 
-     << setw(10) << "MaCB"
-     << setw(10) << "Gio"
-     << setw(15) << "Ngay"
-     << setw(12) << "Trang thai"
-     << setw(15) << "SoHieuMB"
-     << "DSVE\n";
-	cout << "=====================================================================================\n";
-
-	DSCB p = ds;
-	while (p != nullptr)
-	{
-		inCB(p->data);   
-		cout << endl;
-		p = p->next;
-	}
-
-	cout << "=====================================================================================\n";
-}
-//xoa chuyen bay 
-void xoaCB (DSCB &a)
-{
-	if (a == nullptr) return;
-
-	indsCB(a);
-
-	cout << "Nhap so thu tu chuyen bay muon xoa (bat dau tu 1): ";
-	int x;
-	cin >> x;
-
-	if (x == 1)
-	{
-		DSCB tmp = a;
-		a = a->next;
-		delete tmp;
-		return;
-	}
-
-	DSCB p = a;
-	for (int i = 1; i < x - 1 && p->next != nullptr; i++)
-	{
-		p = p->next;
-	}
-
-	if (p->next == nullptr) return;
-
-	DSCB tmp = p->next;
-	p->next = tmp->next;
-	delete tmp;
+    save_file_dscb(ls);
+    cout << "Cap nhat thanh cong!\n";
 }
 
+void huyCB(listCB &ls) {
+    if (ls.head == nullptr) { cout << "Danh sach rong!\n"; return; }
+    string ma_tim;
+    cout << "Nhap maCB can huy: ";
+    getline(cin, ma_tim);
+    NodeCB p = ls.head, pre = nullptr;
+    // s?a di?u ki?n while
+    while (p != nullptr && strcmp(p->data.MaCB, ma_tim.c_str()) != 0) {
+        pre = p;
+        p = p->next;
+    }
+    if (p == nullptr) { cout << "Khong tim thay!\n"; return; }
+    if (pre == nullptr) {
+        ls.head = p->next;
+        if (ls.head == nullptr) ls.tail = nullptr; // s?a == thành =
+    } else {
+        pre->next = p->next;
+        if (p == ls.tail) ls.tail = pre;
+    }
+    delete p;
+    ls.soLuongCB--;
+    save_file_dscb(ls);
+    cout << "Da huy chuyen " << ma_tim << " thanh cong!\n";
+}
 
+void in_danh_sach_cb(listCB ls) {
+    if (ls.head == nullptr) { cout << "\nDanh sach rong!\n"; return; }
+    cout << "\n" << string(100, '=') << "\n";
+    cout << setw(15) << left << "MA CB"
+         << setw(15) << left << "SO HIEU MB"
+         << setw(20) << left << "SAN BAY DEN"
+         << setw(20) << left << "NGAY GIO KH"
+         << setw(15) << left << "TRANG THAI" << "\n";
+    cout << string(100, '-') << "\n";
+    NodeCB p = ls.head;
+    while (p != nullptr) {
+        string ngayGio = to_string(p->data.NgayGioKH.day) + "/" +
+                         to_string(p->data.NgayGioKH.month) + "/" +
+                         to_string(p->data.NgayGioKH.year) + " " +
+                         to_string(p->data.NgayGioKH.hour) + ":" +
+                         to_string(p->data.NgayGioKH.minute);
+        string stt;
+        if (p->data.TrangThai == 0) stt = "Huy chuyen";
+        else if (p->data.TrangThai == 1) stt = "Con ve";
+        else if (p->data.TrangThai == 2) stt = "Het ve";
+        else stt = "Hoan tat";
+        cout << setw(15) << left << p->data.MaCB
+             << setw(15) << left << p->data.SoHieuMB
+             << setw(20) << left << p->data.SanBayDen
+             << setw(20) << left << ngayGio
+             << setw(15) << left << stt << "\n";
+        p = p->next;
+    }
+    cout << string(100, '=') << "\n";
+    cout << "Tong: " << ls.soLuongCB << " chuyen bay.\n";
+}
