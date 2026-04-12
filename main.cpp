@@ -20,7 +20,7 @@ int menu() {
         "4.Huy ve" ,
         "5.In danh sach cac hanh khach trong 1 chuyen bay dua vao ma chuyen bay.",
         "6.In danh sach cac chuyen bay khoi hanh trong  ngay dd/mm/yyyy den noi XXXX ma con ve.",
-        "7.In danh sach cac ve con trong cá»§a 1 chuyen bay co ma chuyen bay la X." ,
+        "7.In danh sach cac ve con trong 1 chuyen bay co ma chuyen bay la X." ,
         "8.Thong ke so luot thuc hien chuyen bay cua tung may bay theo thu tu so luot thuc hien giam dan." ,
         "9.Thoat chuong trinh"
     };
@@ -35,7 +35,7 @@ int menu() {
 
         for (int i = 0; i < n; i++) {
             if (i == pos) {
-                setColor(10); // mÃ u xanh
+                setColor(10); // mau xanh
                 cout << " >> " << items[i] << endl;
                 setColor(7);  // reset
             } else {
@@ -45,10 +45,10 @@ int menu() {
 
         int ch = _getch();
 
-        if (ch == 224) { // phÃ­m Ä‘áº·c biá»‡t
+        if (ch == 224) { // 
             ch = _getch();
-            if (ch == 72) pos--; // â†‘
-            else if (ch == 80) pos++; // â†“
+            if (ch == 72) pos--; // 
+            else if (ch == 80) pos++; // 
 
             if (pos < 0) pos = n - 1;
             if (pos >= n) pos = 0;
@@ -102,35 +102,35 @@ int menuMayBay() {
         }
     }
 }
-int main ()
-{
-	DSMAYBAY ds ;
-	ds.n = 0 ;
-	int a[100], n = 0;
-	
-	while (true) {
-	    int choice = menu();
-	    system("cls");
-	
-	    if (choice == 0) {   // Cáº­p nháº­t mÃ¡y bay
-	
-	        while (true) {
-	            int c = menuMayBay();
-	
-        if (c == 0) themmaybay(ds);
-        else if (c == 1) xoamaybay(ds);
-        else if (c == 2) suamaybay(ds);
-        else if (c == 3) xuatDSMB(ds);
-        else if (c == 5) SaveFile(ds, (char*)"maybay.dat");
-        else if (c == 6) OpenFile(ds, (char*)"maybay.dat");
-        else break;
-	            cout << endl << "Nhan phim bat ky..." << endl;
-	            _getch();
-	        }
-	
-}
-}
-}
+//int main ()
+//{
+//	DSMAYBAY ds ;
+//	ds.n = 0 ;
+//	int a[100], n = 0;
+//	
+//	while (true) {
+//	    int choice = menu();
+//	    system("cls");
+//	
+//	    if (choice == 0) {   // CÃ¡ÂºÂ­p nhÃ¡ÂºÂ­t mÃƒÂ¡y bay
+//	
+//	        while (true) {
+//	            int c = menuMayBay();
+//	
+//        if (c == 0) themmaybay(ds);
+//        else if (c == 1) xoamaybay(ds);
+//        else if (c == 2) suamaybay(ds);
+//        else if (c == 3) xuatDSMB(ds);
+//        else if (c == 5) SaveFile(ds, (char*)"maybay.dat");
+//        else if (c == 6) OpenFile(ds, (char*)"maybay.dat");
+//        else break;
+//	            cout << endl << "Nhan phim bat ky..." << endl;
+//	            _getch();
+//	        }
+//	
+//}
+//}
+//}
 //menu con quan li chuyen bay
 int menuChuyenBay() {
     string items[] = {
@@ -177,8 +177,10 @@ int main ()
 {
 	DSMAYBAY ds ;
 	ds.n = 0 ;
-	int a[100], n = 0;
-	DSCB dscb = nullptr ;
+	listCB ls ;
+	ls.head = nullptr ;
+	ls.tail = nullptr ;
+	ls.soLuongCB = 0 ;
 	while (true) {
 	    int choice = menu();
 	    system("cls");
@@ -192,8 +194,8 @@ int main ()
 	            else if (c == 1) xoamaybay(ds);
 	            else if (c == 2) suamaybay(ds);
 	            else if (c == 3) xuatDSMB(ds);
-				else if (c == 5) SaveFile(ds, (char*)"maybay.dat");
-                else if (c == 6) OpenFile(ds, (char*)"maybay.dat");
+				else if (c == 4) SaveFile(ds, (char*)"maybay.dat");
+                else if (c == 5) OpenFile(ds, (char*)"maybay.dat");
 	            else break;
 	
 	            cout << endl << "Nhan phim bat ky..." << endl;
@@ -204,10 +206,10 @@ int main ()
 	    else if (choice == 1) {
 	        while (true) {
 	            int c = menuChuyenBay();
-	            if (c == 0) themCB (dscb) ;
-	            else if (c == 1) xoaCB (dscb) ;
-	            else if (c == 2) ;//suamaybay(ds);
-	            else if (c == 3) indsCB (dscb) ;
+	            if (c == 0) themCB (ls) ;
+	            else if (c == 1) huyCB (ls) ;
+	            else if (c == 2) chinh_Datetime(ls);
+	            else if (c == 3) in_danh_sach_cb (ls) ;
 	            else break;
 	
 	            cout << endl << "Nhan phim bat ky..." << endl;
@@ -246,5 +248,4 @@ int main ()
 	    _getch();
 }
 }
-
 
