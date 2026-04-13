@@ -1,0 +1,15 @@
+VN101
+180
+Airbus A320
+VN202
+250
+Boeing 747
+VN303
+150
+Airbus A319
+QH401
+200
+Boeing 737
+VJ501
+220
+Airbus A321
