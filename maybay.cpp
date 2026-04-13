@@ -2,6 +2,7 @@
 #include<cstring>
 #include <conio.h>   // _getch()
 #include <windows.h> // mau sac
+#include <fstream>
 using namespace std;
 #define MAXMB 300
 #define MAXSHMB 16
@@ -16,6 +17,46 @@ struct DSMAYBAY {
     int n = 0;
     MAYBAY* mb[MAXMB];
 };
+void SaveFile(DSMAYBAY &ds)
+{
+	 ofstream ofs ;
+	 ofs.open("maybay.txt" , ios::out) ;
+	 if (!ofs.is_open())
+	 {
+	 	cout << "khong the mo file" << endl ;
+	 	return ;
+	 }
+	 for (int i = 0 ; i < ds.n;i++)
+	 {
+	 	ofs << ds.mb[i]->SoHieuMB << "/n";
+		ofs << ds.mb[i]->SoCho << "/n";
+		ofs << ds.mb[i]->LoaiMB << "/n";
+	 }
+	 ofs.close() ;
+	 cout << "Da luu file thanh cong" ;
+}
+void Openfile (DSMAYBAY &ds)
+{
+	ifstream ifs ;
+	ifs.open("maybay.txt" , ios::in) ;
+	MAYBAY tmp ;
+	if (!ifs.is_open())
+	{
+		cout << "Khong tim thay file" << endl ;
+		return ;
+	}
+	while (ifs.peek() != EOF)
+	{
+		MAYBAY* tmp = new MAYBAY;
+    	ifs.getline(tmp->SoHieuMB, MAXSHMB);
+    	ifs >> tmp->SoCho;
+    	ifs.ignore();
+    	ifs.getline(tmp->LoaiMB, MAXLMB);
+    	ds.mb[ds.n] = tmp;
+    	ds.n++;
+	}
+	ifs.close() ;
+}
 //tim may bay 
 int timmaybay (DSMAYBAY &ds , char soHieu[])
 {
@@ -56,6 +97,7 @@ void themmaybay (DSMAYBAY &ds)
 	}while (mb->SoCho < 20) ;
 	ds.mb[ds.n] = mb ;
 	ds.n++ ;
+	SaveFile(ds) ;
 }
 // xoa may bay 
 void xoamaybay (DSMAYBAY &ds) 
@@ -76,6 +118,7 @@ void xoamaybay (DSMAYBAY &ds)
 	}
 	ds.n-- ;
 	cout << "Xoa Thanh Cong" << endl ;
+	SaveFile(ds) ;
 }
 // sua may bay
 void suamaybay(DSMAYBAY &ds){
@@ -97,8 +140,10 @@ void suamaybay(DSMAYBAY &ds){
     }while(ds.mb[pos]->SoCho < 20);
 
     cout<<"--> Cap nhat thanh cong!\n";
+    SaveFile(ds) ;
 }
 void xuatDSMB(DSMAYBAY &ds){
+	Openfile(ds) ;
     if(ds.n==0){
         cout<<"Danh sach rong!\n";
         return;
@@ -114,45 +159,6 @@ void xuatDSMB(DSMAYBAY &ds){
 }
 void BaoLoi(const char* msg){
     cout << msg << endl;
-}
-void SaveFile(DSMAYBAY &ds, char *filename)
-{
-    FILE *f;
-    if ((f = fopen(filename, "wb")) == NULL)
-    {
-        BaoLoi("Loi mo file de ghi");
-        return;
-    }
-
-    for (int i = 0; i < ds.n; i++)
-        fwrite(ds.mb[i], sizeof(MAYBAY), 1, f);
-
-    fclose(f);
-    BaoLoi("Da ghi xong danh sach vao file");
-}
-void OpenFile(DSMAYBAY &ds, char *filename)
-{
-    FILE *f;
-    MAYBAY mb;
-    for(int i = 0; i < ds.n; i++)
-    delete ds.mb[i];
-     ds.n = 0;
-
-    if ((f = fopen(filename, "rb")) == NULL)
-    {
-        BaoLoi("Loi mo file de doc");
-        return;
-    }
-
-    while (fread(&mb, sizeof(MAYBAY), 1, f) != 0)
-    {
-        ds.mb[ds.n] = new MAYBAY;
-        *ds.mb[ds.n] = mb;
-        ds.n++;
-    }
-
-    fclose(f);
-    BaoLoi("Da load xong danh sach vao bo nho");
 }
 void DeleteItem (DSMAYBAY &ds, int i){
 	delete  ds.mb[i]; // chi dung trong mang con tro
