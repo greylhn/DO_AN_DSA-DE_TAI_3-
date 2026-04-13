@@ -65,12 +65,10 @@ int menuMayBay() {
         "2. Xoa may bay",
         "3. Sua thong tin may bay",
         "4. Liet ke danh sach may bay",
-        "5. Quay lai",
-        "6. luu file",
-        "7. Doc file"
+        "5. Quay lai"
     };
 
-    int n = 7;
+    int n = 5;
     int pos = 0;
 
     while (true) {
@@ -112,7 +110,7 @@ int menuMayBay() {
 //	    int choice = menu();
 //	    system("cls");
 //	
-//	    if (choice == 0) {   // CÃ¡ÂºÂ­p nhÃ¡ÂºÂ­t mÃƒÂ¡y bay
+//	    if (choice == 0) {   // CĂƒÂ¡Ă‚ÂºĂ‚Â­p nhĂƒÂ¡Ă‚ÂºĂ‚Â­t mĂƒÆ’Ă‚Â¡y bay
 //	
 //	        while (true) {
 //	            int c = menuMayBay();
@@ -194,8 +192,6 @@ int main ()
 	            else if (c == 1) xoamaybay(ds);
 	            else if (c == 2) suamaybay(ds);
 	            else if (c == 3) xuatDSMB(ds);
-				else if (c == 4) SaveFile(ds, (char*)"maybay.dat");
-                else if (c == 5) OpenFile(ds, (char*)"maybay.dat");
 	            else break;
 	
 	            cout << endl << "Nhan phim bat ky..." << endl;
@@ -248,4 +244,3 @@ int main ()
 	    _getch();
 }
 }
-
