@@ -94,6 +94,7 @@ NodeCB check_maCB(listCB ls, string ma) {
 
 void themCB(listCB &ls) {
 	load_file_dscb(ls) ;
+	in_danh_sach_cb(ls) ; 
     CHUYENBAY tmp;
     cout << "-----Nhap thong tin chuyen bay moi-----\n";
     do {
@@ -121,6 +122,7 @@ void themCB(listCB &ls) {
 }
 
 void chinh_Datetime(listCB &ls) {
+	in_danh_sach_cb(ls) ; 
     string ma_tim;
     cout << "Nhap maCB muon chinh ngay gio: ";
     getline(cin, ma_tim);
@@ -144,6 +146,7 @@ void chinh_Datetime(listCB &ls) {
 
 void huyCB(listCB &ls) {
 	load_file_dscb(ls) ;
+	in_danh_sach_cb(ls) ; 
     if (ls.head == nullptr) { cout << "Danh sach rong!\n"; return; }
     string ma_tim;
     cout << "Nhap maCB can huy: ";
